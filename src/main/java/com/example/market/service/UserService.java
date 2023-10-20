@@ -6,6 +6,7 @@ import com.example.market.repository.ShoppingCartRepository;
 import com.example.market.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class UserService {
         this.shoppingCartRepository = shoppingCartRepository;
     }
 
+    @Transactional
     public User registerUser(User user) {
         //해당 유저의 쇼핑카트 만들어주기
         ShoppingCart newCart = new ShoppingCart();

@@ -32,7 +32,10 @@ public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, Shoppi
     }
 
     public ShoppingCart getCart(Long id) {
-        return shoppingCartRepository.findById(id).orElse(null);
+        // 장바구니 검즘
+        ShoppingCart cart = shoppingCartRepository.findById(id).orElse(null);
+        if(cart == null) throw new IllegalArgumentException("유효하지 장바구니 ID입니다. " + id);
+        return cart;
     }
 
     public List<ShoppingCart> getAllCarts() {

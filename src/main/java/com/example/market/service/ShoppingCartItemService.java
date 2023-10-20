@@ -51,6 +51,10 @@ public class ShoppingCartItemService {
         Long productId = itemDTO.getProductId();
         int quantity = itemDTO.getQuantity();
 
+        // 장바구니 검즘
+        ShoppingCart cart = shoppingCartRepository.findById(cartId).orElse(null);
+        if(cart == null) throw new IllegalArgumentException("유효하지 장바구니 ID입니다. " + cartId);
+
         // 제품이 존재하는지 확인하고 재고가 충분한지 확인합니다.
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 제품 ID: " + productId));
@@ -58,9 +62,6 @@ public class ShoppingCartItemService {
         if(product.getStockQuantity() < quantity) {
             throw new InsufficientStockException("제품 ID에 대한 재고 부족: " + productId);
         }
-
-        // 장바구니가 존재하는지 확인하거나 새로 만듭니다.
-        ShoppingCart cart = shoppingCartRepository.findById(cartId).orElse(null);
 
         // 제품이 이미 장바구니에 있는지 확인하여 수량을 조정하거나 새 항목으로 추가합니다.
         Optional<ShoppingCartItem> optionalCartItem = cart.getItems().stream()
